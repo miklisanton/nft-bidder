@@ -1,0 +1,4877 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: contact@opensea.io
+    name: OpenSea
+    url: https://www.opensea.io
+  description: The API for OpenSea
+  title: OpenSea API
+  version: 2.0.0
+servers:
+- description: Mainnet
+  url: https://api.opensea.io/
+- description: Testnet
+  url: https://testnets-api.opensea.io/
+paths:
+  /api/v2/accounts/{address}:
+    get:
+      description: "Get an OpenSea Account Profile including details such as bio,\
+        \ social media usernames, and profile image."
+      operationId: get_account
+      parameters:
+      - description: The unique public blockchain identifier for the contract or wallet.
+        explode: false
+        in: path
+        name: address
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedAccountDataModel'
+          description: ""
+        "400":
+          description: Returned if the Account does not exist or can not be parsed.
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Account
+      tags:
+      - NFT Endpoints
+  /api/v2/chain/{chain}/account/{address}/nfts:
+    get:
+      description: Get NFTs owned by a given account address.
+      operationId: list_nfts_by_account
+      parameters:
+      - description: The unique public blockchain identifier for the contract or wallet.
+        explode: false
+        in: path
+        name: address
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: true
+        in: query
+        name: collection
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "The number of NFTs to return. Must be between 1 and 50. Default:\
+          \ 50"
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListNftsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get NFTs (by account)
+      tags:
+      - NFT Endpoints
+  /api/v2/chain/{chain}/contract/{address}:
+    get:
+      description: Get a smart contract for a given chain and address.
+      operationId: get_contract
+      parameters:
+      - description: The unique public blockchain identifier for the contract or wallet.
+        explode: false
+        in: path
+        name: address
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListNftsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Contract
+      tags:
+      - NFT Endpoints
+  /api/v2/chain/{chain}/contract/{address}/nfts:
+    get:
+      description: Get multiple NFTs for a smart contract.
+      operationId: list_nfts_by_contract
+      parameters:
+      - description: The unique public blockchain identifier for the contract or wallet.
+        explode: false
+        in: path
+        name: address
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: "The number of NFTs to return. Must be between 1 and 50. Default:\
+          \ 50"
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListNftsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get NFTs (by contract)
+      tags:
+      - NFT Endpoints
+  /api/v2/chain/{chain}/contract/{address}/nfts/{identifier}:
+    get:
+      description: "Get metadata, traits, ownership information, and rarity for a\
+        \ single NFT."
+      operationId: get_nft
+      parameters:
+      - description: The unique public blockchain identifier for the contract or wallet.
+        explode: false
+        in: path
+        name: address
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: The NFT token id.
+        explode: false
+        in: path
+        name: identifier
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetNftResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get an NFT
+      tags:
+      - NFT Endpoints
+  /api/v2/chain/{chain}/contract/{address}/nfts/{identifier}/refresh:
+    post:
+      description: Refresh metadata for a single NFT.
+      operationId: refresh_nft
+      parameters:
+      - description: The unique public blockchain identifier for the contract or wallet.
+        explode: false
+        in: path
+        name: address
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: The NFT token id.
+        explode: false
+        in: path
+        name: identifier
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Metadata has been succesfully queued for refresh.
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Refresh NFT Metadata
+      tags:
+      - NFT Endpoints
+  /api/v2/collection/{collection_slug}/nfts:
+    get:
+      description: Get multiple NFTs for a collection.
+      operationId: list_nfts_by_collection
+      parameters:
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "The number of NFTs to return. Must be between 1 and 50. Default:\
+          \ 50"
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListNftsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get NFTs (by collection)
+      tags:
+      - NFT Endpoints
+  /api/v2/collections:
+    get:
+      description: Get a list of OpenSea collections.
+      operationId: list_collections
+      parameters:
+      - description: The blockchain on which to filter the results
+        explode: true
+        in: query
+        name: chain_identifier
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "If true, will return hidden collections. Default: false"
+        explode: true
+        in: query
+        name: include_hidden
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: "The number of collections to return. Must be between 1 and 100.\
+          \ Default: 100"
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListCollectionsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Collections
+      tags:
+      - NFT Endpoints
+  /api/v2/collections/{collection_slug}:
+    get:
+      description: "Get a single collection including details such as fees, traits,\
+        \ and links."
+      operationId: get_collection
+      parameters:
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedCollectionModel'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get a Collection
+      tags:
+      - NFT Endpoints
+  /api/v2/collections/{collection_slug}/stats:
+    get:
+      description: Get stats for a single collection.
+      operationId: get_collection_stats
+      parameters:
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCollectionStatsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Collection Stats
+      tags:
+      - Analytics Endpoints
+  /api/v2/events/accounts/{address}:
+    get:
+      description: Get a list of events for an account. The list will be paginated
+        and include up to 100 events per page.
+      operationId: list_events_by_account
+      parameters:
+      - description: The unique public blockchain identifier for the contract or wallet.
+        explode: false
+        in: path
+        name: address
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Filter to only include events that occurred at or after the given
+          timestamp. The Unix epoch timstamp must be in seconds
+        explode: true
+        in: query
+        name: after
+        required: false
+        schema:
+          type: number
+        style: form
+      - description: Filter to only include events that occurred before the given
+          timestamp. The Unix epoch timstamp must be in seconds.
+        explode: true
+        in: query
+        name: before
+        required: false
+        schema:
+          type: number
+        style: form
+      - description: The blockchain on which to filter the results.
+        explode: true
+        in: query
+        name: chain
+        required: false
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: form
+      - description: "The type of event to filter by. If not provided, only sales\
+          \ will be returned."
+        explode: true
+        in: query
+        name: event_type
+        required: false
+        schema:
+          items:
+            enum:
+            - all
+            - cancel
+            - order
+            - redemption
+            - sale
+            - transfer
+            type: string
+          type: array
+        style: form
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEventsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Events (by account)
+      tags:
+      - Analytics Endpoints
+  /api/v2/events/chain/{chain}/contract/{address}/nfts/{identifier}:
+    get:
+      description: Get a list of events for a single NFT. The list will be paginated
+        and include up to 100 events per page.
+      operationId: list_events_by_nft
+      parameters:
+      - description: The unique public blockchain identifier for the contract or wallet.
+        explode: false
+        in: path
+        name: address
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: Filter to only include events that occurred at or after the given
+          timestamp. The Unix epoch timstamp must be in seconds
+        explode: true
+        in: query
+        name: after
+        required: false
+        schema:
+          type: number
+        style: form
+      - description: Filter to only include events that occurred before the given
+          timestamp. The Unix epoch timstamp must be in seconds.
+        explode: true
+        in: query
+        name: before
+        required: false
+        schema:
+          type: number
+        style: form
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: "The type of event to filter by. If not provided, only sales\
+          \ will be returned."
+        explode: true
+        in: query
+        name: event_type
+        required: false
+        schema:
+          items:
+            enum:
+            - all
+            - cancel
+            - order
+            - redemption
+            - sale
+            - transfer
+            type: string
+          type: array
+        style: form
+      - description: The NFT token id.
+        explode: false
+        in: path
+        name: identifier
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEventsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Events (by NFT)
+      tags:
+      - Analytics Endpoints
+  /api/v2/events/collection/{collection_slug}:
+    get:
+      description: Get a list of events for a collection. The list will be paginated
+        and include up to 100 events per page.
+      operationId: list_events_by_collection
+      parameters:
+      - description: Filter to only include events that occurred at or after the given
+          timestamp. The Unix epoch timstamp must be in seconds
+        explode: true
+        in: query
+        name: after
+        required: false
+        schema:
+          type: number
+        style: form
+      - description: Filter to only include events that occurred before the given
+          timestamp. The Unix epoch timstamp must be in seconds.
+        explode: true
+        in: query
+        name: before
+        required: false
+        schema:
+          type: number
+        style: form
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "The type of event to filter by. If not provided, only sales\
+          \ will be returned."
+        explode: true
+        in: query
+        name: event_type
+        required: false
+        schema:
+          items:
+            enum:
+            - all
+            - cancel
+            - order
+            - redemption
+            - sale
+            - transfer
+            type: string
+          type: array
+        style: form
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEventsResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Events (by collection)
+      tags:
+      - Analytics Endpoints
+  /api/v2/listings/collection/{collection_slug}/all:
+    get:
+      description: "Get all active, valid listings for a single collection."
+      operationId: get_all_listings_on_collection_v2
+      parameters:
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "The number of listings to return. Must be between 1 and 100.\
+          \ Default: 100"
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedListingList'
+          description: ""
+        "400":
+          description: |-
+            The collection requested does not exist.
+            The query parameters can not be parsed.
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get All Listings (by collection)
+      tags:
+      - Transaction Endpoints
+  /api/v2/listings/fulfillment_data:
+    post:
+      description: "Retrieve all the information, including signatures, needed to\
+        \ fulfill a listing directly onchain."
+      operationId: generate_listing_fulfillment_data_v2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateListingFulfillmentInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GenerateListingFulfillmentInput'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GenerateListingFulfillmentInput'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FulfillmentOutput'
+          description: ""
+        "400":
+          description: |-
+            The request is invalid
+            The order_hash does not exist
+            The chain is not an EVM Chain
+            The protocol_address is not a supported Seaport contract
+            For other error reasons, see the response data.
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Fulfill a Listing
+      tags:
+      - Transaction Endpoints
+  /api/v2/offers:
+    post:
+      description: Create a criteria offer to purchase any NFT in a collection or
+        which matches the specified trait.
+      operationId: post_criteria_offer_v2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostCriteriaOfferInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PostCriteriaOfferInput'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostCriteriaOfferInput'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Offer'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Create Criteria Offer
+      tags:
+      - Transaction Endpoints
+  /api/v2/offers/build:
+    post:
+      description: Build a portion of a criteria offer including the merkle tree needed
+        to post an offer.
+      operationId: build_offer_v2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BuildOfferInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BuildOfferInput'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BuildOfferInput'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BuildOffer'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Build an Offer
+      tags:
+      - Transaction Endpoints
+  /api/v2/offers/collection/{collection_slug}:
+    get:
+      description: "Get the active, valid collection offers for the specified collection."
+      operationId: get_collection_offers_v2
+      parameters:
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferList'
+          description: ""
+        "404":
+          description: Returned when the collection does not exist.
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Collection Offers
+      tags:
+      - Transaction Endpoints
+  /api/v2/offers/collection/{collection_slug}/all:
+    get:
+      description: "Get all active, valid offers for the specified collection. This\
+        \ includes individual and criteria offers."
+      operationId: get_all_offers_on_collection_v2
+      parameters:
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "The number of offers to return. Must be between 1 and 100. Default:\
+          \ 100"
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: next
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOfferList'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "404":
+          description: Returned when the collection does not exist.
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get All Offers (by collection)
+      tags:
+      - Transaction Endpoints
+  /api/v2/offers/collection/{collection_slug}/traits:
+    get:
+      description: "Get the active, valid trait offers for the specified collection."
+      operationId: get_trait_offers_v2
+      parameters:
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The value of the trait (e.g. `0.5`). This is only used for decimal-based
+          numeric traits to ensure it is parsed correctly.
+        explode: true
+        in: query
+        name: float_value
+        required: false
+        schema:
+          format: float
+          type: number
+        style: form
+      - description: The value of the trait (e.g. `10`). This is only used for numeric
+          traits to ensure it is parsed correctly.
+        explode: true
+        in: query
+        name: int_value
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: The name of the trait (e.g. 'Background')
+        explode: true
+        in: query
+        name: type
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The value of the trait (e.g. 'Red')
+        explode: true
+        in: query
+        name: value
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfferList'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "404":
+          description: Returned when the collection does not exist.
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Trait Offers
+      tags:
+      - Transaction Endpoints
+  /api/v2/offers/fulfillment_data:
+    post:
+      description: "Retrieve all the information, including signatures, needed to\
+        \ fulfill an offer directly onchain."
+      operationId: generate_offer_fulfillment_data_v2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateOfferFulfillmentInput'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GenerateOfferFulfillmentInput'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GenerateOfferFulfillmentInput'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FulfillmentOutput'
+          description: ""
+        "400":
+          description: |-
+            The request is invalid
+            The order_hash does not exist
+            The chain is not an EVM Chain
+            The protocol_address is not a supported Seaport contract
+            For other error reasons, see the response data.
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Fullfill an Offer
+      tags:
+      - Transaction Endpoints
+  /api/v2/orders/{chain}/{protocol}/listings:
+    get:
+      description: "Get the complete set of active, valid listings."
+      operationId: get_listings
+      parameters:
+      - description: "Filter results by the contract address for NFT(s).  \n NOTE:\
+          \ If used, token_ids or token_id is required."
+        explode: true
+        in: query
+        name: asset_contract_address
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Restricts results to only include orders that are bundles of\
+          \ NFTs. Default: false"
+        explode: true
+        in: query
+        name: bundled
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "The number of orders to return. Must be between 1 and 50. Default:\
+          \ 20"
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Filter to only include orders that were listed after the given
+          timestamp. This is a Unix epoch timestamp in seconds.
+        explode: true
+        in: query
+        name: listed_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Filter to only include orders that were listed before the given
+          timestamp. This is a Unix epoch timestamp in seconds.
+        explode: true
+        in: query
+        name: listed_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Filter results by the order maker's wallet address.
+        explode: true
+        in: query
+        name: maker
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "The order in which to sort the results. Default: created_date\
+          \ \n NOTE: If `eth_price` is used, `asset_contract_address` and `token_id`\
+          \ are required."
+        explode: true
+        in: query
+        name: order_by
+        required: false
+        schema:
+          enum:
+          - created_date
+          - eth_price
+          type: string
+        style: form
+      - description: "The direction in which to sort the results. Default: desc"
+        explode: true
+        in: query
+        name: order_direction
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - description: Payment Token Address to filter results. This ensures all returned
+          orders are listed in a single currency.
+        explode: true
+        in: query
+        name: payment_token_address
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The token settlement protocol to use in the request.
+        explode: false
+        in: path
+        name: protocol
+        required: true
+        schema:
+          enum:
+          - seaport
+          type: string
+        style: simple
+      - description: Filter results by the order taker's wallet address.
+        explode: true
+        in: query
+        name: taker
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "An array of token IDs to search for (e.g. ?token_ids=1&token_ids=209).\
+          \ This endpoint will return a list of orders with token_id matching any\
+          \ of the IDs in this array. \n NOTE: If used, asset_contract_address is\
+          \ required."
+        explode: true
+        in: query
+        name: token_ids
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetListingsResponse'
+          description: ""
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Listings
+      tags:
+      - Transaction Endpoints
+    post:
+      description: List a single NFT (ERC721 or ERC1155) for sale on the OpenSea marketplace.
+      operationId: post_listing
+      parameters:
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: The token settlement protocol to use in the request.
+        explode: false
+        in: path
+        name: protocol
+        required: true
+        schema:
+          enum:
+          - seaport
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInputWithProtocol'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderInputWithProtocol'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderInputWithProtocol'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateListingResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Create Listing
+      tags:
+      - Transaction Endpoints
+  /api/v2/orders/{chain}/{protocol}/offers:
+    get:
+      description: "Get the active, valid individual offers. This does not include\
+        \ criteria offers."
+      operationId: get_offers
+      parameters:
+      - description: "Filter results by the contract address for NFT(s).  \n NOTE:\
+          \ If used, token_ids or token_id is required."
+        explode: true
+        in: query
+        name: asset_contract_address
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "Restricts results to only include orders that are bundles of\
+          \ NFTs. Default: false"
+        explode: true
+        in: query
+        name: bundled
+        required: false
+        schema:
+          type: boolean
+        style: form
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: The cursor for the next page of results. This is returned from
+          a previous request.
+        explode: true
+        in: query
+        name: cursor
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "The number of orders to return. Must be between 1 and 50. Default:\
+          \ 20"
+        explode: true
+        in: query
+        name: limit
+        required: false
+        schema:
+          type: integer
+        style: form
+      - description: Filter to only include orders that were listed after the given
+          timestamp. This is a Unix epoch timestamp in seconds.
+        explode: true
+        in: query
+        name: listed_after
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Filter to only include orders that were listed before the given
+          timestamp. This is a Unix epoch timestamp in seconds.
+        explode: true
+        in: query
+        name: listed_before
+        required: false
+        schema:
+          format: date-time
+          type: string
+        style: form
+      - description: Filter results by the order maker's wallet address.
+        explode: true
+        in: query
+        name: maker
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "The order in which to sort the results. Default: created_date\
+          \ \n NOTE: If `eth_price` is used, `asset_contract_address` and `token_id`\
+          \ are required."
+        explode: true
+        in: query
+        name: order_by
+        required: false
+        schema:
+          enum:
+          - created_date
+          - eth_price
+          type: string
+        style: form
+      - description: "The direction in which to sort the results. Default: desc"
+        explode: true
+        in: query
+        name: order_direction
+        required: false
+        schema:
+          enum:
+          - asc
+          - desc
+          type: string
+        style: form
+      - description: Payment Token Address to filter results. This ensures all returned
+          orders are listed in a single currency.
+        explode: true
+        in: query
+        name: payment_token_address
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The token settlement protocol to use in the request.
+        explode: false
+        in: path
+        name: protocol
+        required: true
+        schema:
+          enum:
+          - seaport
+          type: string
+        style: simple
+      - description: Filter results by the order taker's wallet address.
+        explode: true
+        in: query
+        name: taker
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: "An array of token IDs to search for (e.g. ?token_ids=1&token_ids=209).\
+          \ This endpoint will return a list of orders with token_id matching any\
+          \ of the IDs in this array. \n NOTE: If used, asset_contract_address is\
+          \ required."
+        explode: true
+        in: query
+        name: token_ids
+        required: false
+        schema:
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOfferResponse'
+          description: ""
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Individual Offers
+      tags:
+      - Transaction Endpoints
+    post:
+      description: Create an offer to purchase a single NFT (ERC721 or ERC1155).
+      operationId: post_offer
+      parameters:
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: The token settlement protocol to use in the request.
+        explode: false
+        in: path
+        name: protocol
+        required: true
+        schema:
+          enum:
+          - seaport
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInputWithProtocol'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderInputWithProtocol'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderInputWithProtocol'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOfferResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Create Individual Offer
+      tags:
+      - Transaction Endpoints
+  /api/v2/orders/chain/{chain}/protocol/{protocol_address}/{order_hash}:
+    get:
+      description: "Get a single order, offer or listing, by its order hash. Protocol\
+        \ and Chain are required to prevent hash collisions."
+      operationId: get_order
+      parameters:
+      - description: The blockchain on which to filter the results.
+        explode: false
+        in: path
+        name: chain
+        required: true
+        schema:
+          enum:
+          - arbitrum
+          - arbitrum_goerli
+          - arbitrum_nova
+          - avalanche
+          - avalanche_fuji
+          - baobab
+          - base
+          - base_goerli
+          - bsc
+          - bsctestnet
+          - ethereum
+          - goerli
+          - klaytn
+          - matic
+          - mumbai
+          - optimism
+          - optimism_goerli
+          - sepolia
+          - solana
+          - soldev
+          - zora
+          - zora_testnet
+          type: string
+        style: simple
+      - description: The hash of the order to retrieve.
+        explode: false
+        in: path
+        name: order_hash
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: The contract address of the protocol to use in the request.
+        explode: false
+        in: path
+        name: protocol_address
+        required: true
+        schema:
+          enum:
+          - "[\"0x00000000000000adc04c56bf30ac9d3c0aaf14dc\"]"
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetOrderResult'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Order
+      tags:
+      - Transaction Endpoints
+  /api/v2/traits/{collection_slug}:
+    get:
+      description: Get the traits in a collection.
+      operationId: get_traits
+      parameters:
+      - description: Unique string to identify a collection on OpenSea. This can be
+          found by visiting the collection on the OpenSea website and noting the last
+          path parameter.
+        explode: false
+        in: path
+        name: collection_slug
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                GetTraitResponse:
+                  value: "{\"categories\": {\"face\": \"string\", \"background\":\
+                    \ \"string\", \"level\": \"number\"}, \"counts\": { \"face\":\
+                    \ {\"glasses\": 4, \"sunglasses\": 2}, \"background\": {\"red\"\
+                    : 6}, \"level\": {\"min\": 1, \"max\": 99}}}"
+              schema:
+                $ref: '#/components/schemas/GetTraitResponse'
+          description: ""
+        "400":
+          description: "For error reasons, review the response data."
+        "500":
+          description: Internal server error. Please open a support ticket so OpenSea
+            can investigate.
+      security:
+      - OpenSeaAuth: []
+      summary: Get Traits
+      tags:
+      - NFT Endpoints
+components:
+  schemas:
+    BasicListingPrice:
+      example:
+        current: ""
+      properties:
+        current:
+          allOf:
+          - $ref: '#/components/schemas/PriceModel'
+          title: Price
+      required:
+      - current
+      title: BasicListingPrice
+      type: object
+    BuildOffer:
+      example:
+        encoded_token_ids: encoded_token_ids
+        partialParameters: ""
+      properties:
+        partialParameters:
+          allOf:
+          - $ref: '#/components/schemas/PartialParameters'
+          description: Partial set of Seaport Order Parameters
+          title: Partialparameters
+        encoded_token_ids:
+          description: "Represents a list of token ids which can be used to fulfill\
+            \ the criteria offer. When decoded using the provided SDK function, developers\
+            \ can now see a list of all tokens that could be used to fulfill the offer."
+          title: Encoded Token Ids
+          type: string
+      required:
+      - partialParameters
+      title: BuildOffer
+      type: object
+    BuildOfferInput:
+      additionalProperties: false
+      example:
+        quantity: 0
+        offerer: offerer
+        criteria: ""
+        protocol_address: protocol_address
+        offer_protection_enabled: true
+      properties:
+        offerer:
+          description: The address which supplies all the items in the offer.
+          title: Offerer
+          type: string
+        quantity:
+          default: 1
+          description: The number of offers to place.
+          title: Quantity
+          type: integer
+        criteria:
+          allOf:
+          - $ref: '#/components/schemas/Criteria'
+          description: Criteria for the collection or trait offer
+          title: Criteria
+        protocol_address:
+          description: "Exchange contract address. Must be one of ['0x00000000000000adc04c56bf30ac9d3c0aaf14dc']"
+          title: Protocol Address
+          type: string
+        offer_protection_enabled:
+          default: true
+          description: Builds the offer on OpenSea's signed zone to provide offer
+            protections from receiving an item which is disabled from trading.
+          title: Offer Protection Enabled
+          type: boolean
+      required:
+      - criteria
+      - offerer
+      - protocol_address
+      title: BuildOfferInput
+      type: object
+    CancelEventModel:
+      example:
+        chain: ""
+        event_type: ""
+        order_hash: order_hash
+      properties:
+        event_type:
+          allOf:
+          - $ref: '#/components/schemas/CancelEventModelEventTypeEnum'
+          default: cancel
+          title: Event Type
+        order_hash:
+          description: Order hash for the order which was cancelled
+          title: Order Hash
+          type: string
+        chain:
+          allOf:
+          - $ref: '#/components/schemas/ChainIdentifier'
+          description: The chain on which the cancelled order originated
+      required:
+      - chain
+      - order_hash
+      title: CancelEventModel
+      type: object
+    CancelEventModelEventTypeEnum:
+      enum:
+      - cancel
+      type: string
+    CategoryType:
+      description: An enumeration.
+      enum:
+      - string
+      - number
+      example: "{}"
+      properties: {}
+      title: CategoryType
+      type: string
+    ChainIdentifier:
+      description: OpenSea supported chains.
+      enum:
+      - ethereum
+      - matic
+      - klaytn
+      - bsc
+      - solana
+      - arbitrum
+      - arbitrum_nova
+      - avalanche
+      - optimism
+      - base
+      - zora
+      - sepolia
+      - rinkeby
+      - mumbai
+      - baobab
+      - bsctestnet
+      - goerli
+      - soldev
+      - arbitrum_goerli
+      - avalanche_fuji
+      - optimism_goerli
+      - base_goerli
+      - zora_testnet
+      example: {}
+      properties: {}
+      title: ChainIdentifier
+      type: string
+    Collection:
+      properties:
+        slug:
+          description: Unique string to identify a collection on OpenSea. This can
+            be found by visiting the collection on the OpenSea website and noting
+            the last path parameter.
+          title: Slug
+          type: string
+      required:
+      - slug
+      title: Collection
+      type: object
+    CollectionContractModel:
+      description: Define the Contract's Addresses and Chain
+      example:
+        chain: ""
+        address: address
+      properties:
+        address:
+          description: "The unique public blockchain identifier, address, for the\
+            \ contract."
+          title: Address
+          type: string
+        chain:
+          allOf:
+          - $ref: '#/components/schemas/ChainIdentifier'
+          description: The chain on which the contract exists
+      required:
+      - address
+      - chain
+      title: CollectionContractModel
+      type: object
+    CollectionFeeModel:
+      example:
+        fee: 0.8008281904610115
+        recipient: recipient
+        required: false
+      properties:
+        fee:
+          description: Percentage of the sale price that is paid to the recipient
+          title: Fee
+          type: number
+        recipient:
+          description: "The unique public blockchain identifier, address, for the\
+            \ recipient"
+          title: Recipient
+          type: string
+        required:
+          default: false
+          description: If the fee is required for the collection
+          title: Required
+          type: boolean
+      required:
+      - fee
+      - recipient
+      title: CollectionFeeModel
+      type: object
+    CollectionModel:
+      example:
+        owner: owner
+        opensea_url: opensea_url
+        safelist_status: {}
+        wiki_url: ""
+        is_disabled: true
+        twitter_username: ""
+        description: ""
+        project_url: ""
+        collection: collection
+        contracts:
+        - chain: ""
+          address: address
+        - chain: ""
+          address: address
+        discord_url: ""
+        is_nsfw: true
+        trait_offers_enabled: true
+        telegram_url: ""
+        name: name
+        category: category
+        instagram_username: ""
+      properties:
+        collection:
+          description: Collection slug. A unique string to identify a collection on
+            OpenSea
+          title: Collection
+          type: string
+        name:
+          description: Name of the collection
+          title: Name
+          type: string
+        description:
+          default: ""
+          description: Description of the collection
+          title: Description
+          type: string
+        owner:
+          description: "The unique public blockchain identifier, address, for the\
+            \ owner wallet."
+          title: Owner
+          type: string
+        safelist_status:
+          $ref: '#/components/schemas/SafelistRequestStatus'
+        category:
+          description: "Category of the collection (e.g. PFPs, Memberships, Art)"
+          title: Category
+          type: string
+        is_disabled:
+          description: If the collection is currently able to be bought or sold using
+            OpenSea
+          title: Is Disabled
+          type: boolean
+        is_nsfw:
+          description: If the collection is currently classified as 'Not Safe for
+            Work' by OpenSea
+          title: Is Nsfw
+          type: boolean
+        trait_offers_enabled:
+          description: If trait offers are currently being accepted for the collection
+          title: Trait Offers Enabled
+          type: boolean
+        opensea_url:
+          description: OpenSea Link to collection
+          title: Opensea Url
+          type: string
+        project_url:
+          default: ""
+          description: External URL for the collection's website
+          title: Project Url
+          type: string
+        wiki_url:
+          default: ""
+          description: External URL for the collection's wiki
+          title: Wiki Url
+          type: string
+        discord_url:
+          default: ""
+          description: External URL for the collection's Discord server
+          title: Discord Url
+          type: string
+        telegram_url:
+          default: ""
+          description: External URL for the collection's Telegram group
+          title: Telegram Url
+          type: string
+        twitter_username:
+          default: ""
+          description: Username for the collection's Twitter account
+          title: Twitter Username
+          type: string
+        instagram_username:
+          default: ""
+          description: Username for the collection's Instagram account
+          title: Instagram Username
+          type: string
+        contracts:
+          items:
+            $ref: '#/components/schemas/CollectionContractModel'
+          title: Contract
+          type: array
+      required:
+      - category
+      - collection
+      - contracts
+      - is_disabled
+      - is_nsfw
+      - name
+      - opensea_url
+      - owner
+      - safelist_status
+      - trait_offers_enabled
+      title: CollectionModel
+      type: object
+    CollectionStatsInterval:
+      description: The interval for which the stats are calculated
+      enum:
+      - one_day
+      - one_week
+      - one_month
+      example: "{}"
+      properties: {}
+      title: CollectionStatsInterval
+      type: string
+    CollectionStatsIntervalModel:
+      example:
+        volume: 0.8008281904610115
+        average_price: 2.3021358869347655
+        interval: "{}"
+        volume_change: 1.4658129805029452
+        sales: 5
+        volume_diff: 6.027456183070403
+        sales_diff: 5.637376656633329
+      properties:
+        interval:
+          $ref: '#/components/schemas/CollectionStatsInterval'
+        volume:
+          description: The volume of sales for the collection during the specified
+            interval
+          title: Volume
+          type: number
+        volume_diff:
+          description: The volume differential compared to the previous interval
+          title: Volume Diff
+          type: number
+        volume_change:
+          description: The percentage change in volume compared to the previous interval
+          title: Volume Change
+          type: number
+        sales:
+          description: The number of sales for the collection during the specified
+            interval
+          title: Sales
+          type: integer
+        sales_diff:
+          description: The percentage change in number of sales compared to the previous
+            interval
+          title: Sales Diff
+          type: number
+        average_price:
+          description: The average sale price of NFTs in the collection during the
+            interval
+          title: Average Price
+          type: number
+      required:
+      - average_price
+      - interval
+      - sales
+      - sales_diff
+      - volume
+      - volume_change
+      - volume_diff
+      title: CollectionStatsIntervalModel
+      type: object
+    CollectionStatsModel:
+      properties:
+        volume:
+          description: The all time volume of sales for the collection
+          title: Volume
+          type: number
+        sales:
+          description: The all time number of sales for the collection
+          title: Sales
+          type: integer
+        average_price:
+          description: The all time average sale price of NFTs in the collection
+          title: Average Price
+          type: number
+        num_owners:
+          description: The current number of unique owners of NFTs in the collection
+          title: Num Owners
+          type: integer
+        market_cap:
+          description: The current market cap of the collection
+          title: Market Cap
+          type: number
+        floor_price:
+          description: The current lowest price of NFTs in the collection
+          title: Floor Price
+          type: number
+        floor_price_symbol:
+          description: The symbol of the payment asset for the floor price
+          title: Floor Price Symbol
+          type: string
+      required:
+      - average_price
+      - floor_price
+      - floor_price_symbol
+      - market_cap
+      - num_owners
+      - sales
+      - volume
+      title: CollectionStatsModel
+      type: object
+    ConfigEnum:
+      description: |-
+        * `affiliate` - affiliate
+        * `affiliate_partner` - affiliate_partner
+        * `affiliate_requested` - affiliate_requested
+        * `affiliate_blacklisted` - affiliate_blacklisted
+        * `verified` - verified
+        * `moderator` - moderator
+        * `staff` - staff
+        * `employee` - employee
+      enum:
+      - affiliate
+      - affiliate_partner
+      - affiliate_requested
+      - affiliate_blacklisted
+      - verified
+      - moderator
+      - staff
+      - employee
+      type: string
+    ConsiderationInput:
+      properties:
+        asset_contract_address:
+          title: Asset Contract Address
+          type: string
+        token_id:
+          description: NFT Token ID which will be used to fulfill the offer.
+          title: Token Id
+          type: string
+      required:
+      - asset_contract_address
+      - token_id
+      title: ConsiderationInput
+      type: object
+    ConsiderationItem:
+      properties:
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+        token:
+          description: The item's token contract (with the null address used for native
+            tokens)
+          title: Token
+          type: string
+        identifierOrCriteria:
+          description: "The ERC721 or ERC1155 token identifier or, in the case of\
+            \ a criteria-based item type, a merkle root composed of the valid set\
+            \ of token identifiers for the item. This value will be ignored for Ether\
+            \ and ERC20 item types, and can optionally be zero for criteria-based\
+            \ item types to allow for any identifier."
+          title: Identifierorcriteria
+          type: integer
+        startAmount:
+          description: The amount of the token in question that will be required should
+            the order be fulfilled.
+          title: Startamount
+          type: integer
+        endAmount:
+          description: "When endAmount differs from `startAmount`, the realized amount\
+            \ is calculated linearly based on the time elapsed since the order became\
+            \ active."
+          title: Endamount
+          type: integer
+        recipient:
+          description: The address which will receive the consideration item when
+            the order is executed.
+          title: Recipient
+          type: string
+      required:
+      - endAmount
+      - identifierOrCriteria
+      - itemType
+      - recipient
+      - startAmount
+      - token
+      title: ConsiderationItem
+      type: object
+    Contract:
+      properties:
+        address:
+          title: Address
+          type: string
+      required:
+      - address
+      title: Contract
+      type: object
+    CreateListingResponse:
+      example:
+        order:
+          closing_date: 2000-01-23T04:56:07.000+00:00
+          side: side
+          criteria_proof:
+          - criteria_proof
+          - criteria_proof
+          expiration_time: 6
+          protocol_address: protocol_address
+          maker: ""
+          remaining_quantity: 1
+          order_hash: order_hash
+          finalized: true
+          maker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          listing_time: 0
+          protocol_data: ""
+          cancelled: true
+          taker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          created_date: 2000-01-23T04:56:07.000+00:00
+          current_price: current_price
+          taker: ""
+          order_type: ""
+          marked_invalid: true
+          relay_id: relay_id
+      properties:
+        order:
+          $ref: '#/components/schemas/SignedSimpleOrderV2'
+      required:
+      - order
+      type: object
+    CreateOfferResponse:
+      example:
+        order:
+          closing_date: 2000-01-23T04:56:07.000+00:00
+          side: side
+          criteria_proof:
+          - criteria_proof
+          - criteria_proof
+          expiration_time: 6
+          protocol_address: protocol_address
+          maker: ""
+          remaining_quantity: 1
+          order_hash: order_hash
+          finalized: true
+          maker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          listing_time: 0
+          protocol_data: ""
+          cancelled: true
+          taker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          created_date: 2000-01-23T04:56:07.000+00:00
+          current_price: current_price
+          taker: ""
+          order_type: ""
+          marked_invalid: true
+          relay_id: relay_id
+      properties:
+        order:
+          $ref: '#/components/schemas/SignedSimpleOrderV2'
+      required:
+      - order
+      type: object
+    CreatedAtEnum:
+      enum:
+      - ' '
+      type: string
+    Criteria:
+      properties:
+        collection:
+          allOf:
+          - $ref: '#/components/schemas/Collection'
+          description: The collection in which the criteria offer is being made for.
+          title: Collection
+        contract:
+          allOf:
+          - $ref: '#/components/schemas/Contract'
+          description: "The unique public blockchain identifier, address, for the\
+            \ NFT contract"
+          title: Contract
+        trait:
+          allOf:
+          - $ref: '#/components/schemas/Trait'
+          description: The trait that the criteria offer is being made for.
+          title: Trait
+        encoded_token_ids:
+          description: "Represents a list of token ids which can be used to fulfill\
+            \ the criteria offer. When decoded using the provided SDK function, developers\
+            \ can now see a list of all tokens that could be used to fulfill the offer."
+          title: Encoded Token Ids
+          type: string
+      required:
+      - collection
+      - contract
+      title: Criteria
+      type: object
+    DetailedAccountDataModel:
+      example:
+        website: ""
+        address: ""
+        joined_date: 2000-01-23
+        banner_image_url: ""
+        bio: ""
+        profile_image_url: ""
+        social_media_accounts:
+        - platform: platform
+          username: username
+        - platform: platform
+          username: username
+        username: ""
+      properties:
+        address:
+          default: ""
+          description: The unique public blockchain identifier for the wallet.
+          title: Address
+          type: string
+        username:
+          default: ""
+          description: The OpenSea account's username.
+          title: Username
+          type: string
+        profile_image_url:
+          default: ""
+          description: The OpenSea account's image url.
+          title: Profile Image Url
+          type: string
+        banner_image_url:
+          default: ""
+          description: The OpenSea account's banner url.
+          title: Banner Image Url
+          type: string
+        website:
+          default: ""
+          description: Personal website for the OpenSea user.
+          title: Website
+          type: string
+        social_media_accounts:
+          default: []
+          items:
+            $ref: '#/components/schemas/SocialMediaAccountModel'
+          title: Social Media Account
+          type: array
+        bio:
+          default: ""
+          description: The OpenSea account's bio.
+          title: Bio
+          type: string
+        joined_date:
+          description: Date the account was first added to OpenSea.
+          format: date
+          title: Joined Date
+          type: string
+      title: DetailedAccountDataModel
+      type: object
+    DetailedCollectionModel:
+      example:
+        owner: owner
+        fees:
+        - fee: 0.8008281904610115
+          recipient: recipient
+          required: false
+        - fee: 0.8008281904610115
+          recipient: recipient
+          required: false
+        opensea_url: opensea_url
+        safelist_status: {}
+        wiki_url: ""
+        is_disabled: true
+        twitter_username: ""
+        description: ""
+        project_url: ""
+        collection: collection
+        contracts:
+        - chain: ""
+          address: address
+        - chain: ""
+          address: address
+        discord_url: ""
+        is_nsfw: true
+        trait_offers_enabled: true
+        telegram_url: ""
+        name: name
+        category: category
+        instagram_username: ""
+        editors:
+        - editors
+        - editors
+      properties:
+        collection:
+          description: Collection slug. A unique string to identify a collection on
+            OpenSea
+          title: Collection
+          type: string
+        name:
+          description: Name of the collection
+          title: Name
+          type: string
+        description:
+          default: ""
+          description: Description of the collection
+          title: Description
+          type: string
+        owner:
+          description: "The unique public blockchain identifier, address, for the\
+            \ owner wallet."
+          title: Owner
+          type: string
+        safelist_status:
+          $ref: '#/components/schemas/SafelistRequestStatus'
+        category:
+          description: "Category of the collection (e.g. PFPs, Memberships, Art)"
+          title: Category
+          type: string
+        is_disabled:
+          description: If the collection is currently able to be bought or sold using
+            OpenSea
+          title: Is Disabled
+          type: boolean
+        is_nsfw:
+          description: If the collection is currently classified as 'Not Safe for
+            Work' by OpenSea
+          title: Is Nsfw
+          type: boolean
+        trait_offers_enabled:
+          description: If trait offers are currently being accepted for the collection
+          title: Trait Offers Enabled
+          type: boolean
+        opensea_url:
+          description: OpenSea Link to collection
+          title: Opensea Url
+          type: string
+        project_url:
+          default: ""
+          description: External URL for the collection's website
+          title: Project Url
+          type: string
+        wiki_url:
+          default: ""
+          description: External URL for the collection's wiki
+          title: Wiki Url
+          type: string
+        discord_url:
+          default: ""
+          description: External URL for the collection's Discord server
+          title: Discord Url
+          type: string
+        telegram_url:
+          default: ""
+          description: External URL for the collection's Telegram group
+          title: Telegram Url
+          type: string
+        twitter_username:
+          default: ""
+          description: Username for the collection's Twitter account
+          title: Twitter Username
+          type: string
+        instagram_username:
+          default: ""
+          description: Username for the collection's Instagram account
+          title: Instagram Username
+          type: string
+        contracts:
+          items:
+            $ref: '#/components/schemas/CollectionContractModel'
+          title: Contract
+          type: array
+        editors:
+          description: List of editor addresses for the collection
+          items:
+            type: string
+          title: Editors
+          type: array
+        fees:
+          description: List of fees for the collection including creator earnings
+            and OpenSea fees
+          items:
+            $ref: '#/components/schemas/CollectionFeeModel'
+          title: Fees
+          type: array
+      required:
+      - category
+      - collection
+      - contracts
+      - editors
+      - fees
+      - is_disabled
+      - is_nsfw
+      - name
+      - opensea_url
+      - owner
+      - safelist_status
+      - trait_offers_enabled
+      title: DetailedCollectionModel
+      type: object
+    DetailedNftModel:
+      example:
+        identifier: identifier
+        animation_url: ""
+        creator: creator
+        traits:
+        - display_type: "{}"
+          trait_count: 0
+          value: 1.4658129805029452
+          trait_type: trait_type
+          max_value: max_value
+          order: 6
+        - display_type: "{}"
+          trait_count: 0
+          value: 1.4658129805029452
+          trait_type: trait_type
+          max_value: max_value
+          order: 6
+        metadata_url: ""
+        image_url: ""
+        contract: contract
+        is_disabled: true
+        description: description
+        created_at: ""
+        owners:
+        - address: address
+          quantity: 5
+        - address: address
+          quantity: 5
+        collection: collection
+        is_nsfw: true
+        is_suspicious: true
+        updated_at: updated_at
+        name: name
+        token_standard: token_standard
+        rarity: ""
+      properties:
+        identifier:
+          description: The NFT's unique identifier within the smart contract (also
+            referred to as token_id)
+          title: Identifier
+          type: string
+        collection:
+          description: Collection slug. A unique string to identify a collection on
+            OpenSea
+          title: Collection
+          type: string
+        contract:
+          description: The unique public blockchain identifier for the contract
+          title: Contract
+          type: string
+        token_standard:
+          description: "ERC standard of the token (erc721, erc1155)"
+          title: Token Standard
+          type: string
+        name:
+          description: Name of the NFT
+          title: Name
+          type: string
+        description:
+          description: Description of the NFT
+          title: Description
+          type: string
+        image_url:
+          default: ""
+          description: "Link to the NFT's original image. This may be an HTTP url,\
+            \ SVG data, or other directly embedded data."
+          title: Image Url
+          type: string
+        metadata_url:
+          default: ""
+          description: Link to the offchain metadata store
+          title: Metadata Url
+          type: string
+        created_at:
+          allOf:
+          - $ref: '#/components/schemas/CreatedAtEnum'
+          default: ' '
+          description: Deprecated Field
+          title: Created At
+        updated_at:
+          description: Last time that the NFT's metadata was updated by OpenSea
+          title: Updated At
+          type: string
+        is_disabled:
+          description: If the item is currently able to be bought or sold using OpenSea
+          title: Is Disabled
+          type: boolean
+        is_nsfw:
+          description: If the item is currently classified as 'Not Safe for Work'
+            by OpenSea
+          title: Is Nsfw
+          type: boolean
+        animation_url:
+          default: ""
+          description: Link to the NFT's original animation.
+          title: Animation Url
+          type: string
+        is_suspicious:
+          description: If the item has been reported for suspicious activity by OpenSea
+          title: Is Suspicious
+          type: boolean
+        creator:
+          description: "The unique public blockchain identifier, wallet address, for\
+            \ the creator"
+          title: Creator
+          type: string
+        traits:
+          description: List of Trait objects. The field will be null if the NFT has
+            more than 50 traits
+          items:
+            $ref: '#/components/schemas/TraitModel'
+          title: Traits
+          type: array
+        owners:
+          description: List of Owners. The field will be null if the NFT has more
+            than 50 owners
+          items:
+            $ref: '#/components/schemas/OwnerModel'
+          title: Owners
+          type: array
+        rarity:
+          allOf:
+          - $ref: '#/components/schemas/RarityDataModel'
+          description: Rarity data for the NFT
+          title: Rarity
+      required:
+      - collection
+      - contract
+      - creator
+      - description
+      - identifier
+      - is_disabled
+      - is_nsfw
+      - is_suspicious
+      - name
+      - owners
+      - rarity
+      - token_standard
+      - traits
+      - updated_at
+      title: DetailedNftModel
+      type: object
+    DisplayTypeField:
+      description: A field indicating how to display. None is used for string traits.
+      enum:
+      - number
+      - boost_percentage
+      - boost_number
+      - author
+      - date
+      - None
+      example: "{}"
+      properties: {}
+      title: DisplayTypeField
+      type: string
+    EventPaymentModel:
+      properties:
+        quantity:
+          description: Amount of tokens in the order
+          title: Quantity
+          type: integer
+        token_address:
+          description: The contract address for the ERC20 token
+          title: Token Address
+          type: string
+        decimals:
+          description: "Returns the number of decimals the token uses - e.g. 8, means\
+            \ to divide the token amount by 100000000 to get its user representation."
+          title: Decimals
+          type: integer
+        symbol:
+          description: "Returns the symbol of the token, e.g. ETH, WETH, USDC, etc"
+          title: Symbol
+          type: string
+      required:
+      - decimals
+      - quantity
+      - symbol
+      - token_address
+      title: EventPaymentModel
+      type: object
+    FulfillerInput:
+      properties:
+        address:
+          title: Address
+          type: string
+      required:
+      - address
+      title: FulfillerInput
+      type: object
+    FulfillmentData:
+      properties:
+        transaction:
+          allOf:
+          - $ref: '#/components/schemas/Transaction'
+          description: The name of the fulfillment method and associated call data.
+          title: Transaction
+        orders:
+          description: Array of Seaport Orders.
+          items:
+            $ref: '#/components/schemas/SerializedOrder'
+          title: Order
+          type: array
+      required:
+      - orders
+      - transaction
+      title: FulfillmentData
+      type: object
+    FulfillmentInput:
+      properties:
+        hash:
+          description: Hash of the order to fulfill.
+          title: Hash
+          type: string
+        chain:
+          title: Chain
+          type: string
+        protocol_address:
+          description: "Exchange contract address. Must be one of ['0x00000000000000adc04c56bf30ac9d3c0aaf14dc']"
+          title: Protocol Address
+          type: string
+      required:
+      - chain
+      - hash
+      title: FulfillmentInput
+      type: object
+    FulfillmentOutput:
+      example:
+        protocol: protocol
+        fulfillment_data: ""
+      properties:
+        protocol:
+          description: "Exchange contract address. Must be one of ['0x00000000000000adc04c56bf30ac9d3c0aaf14dc']"
+          title: Protocol
+          type: string
+        fulfillment_data:
+          allOf:
+          - $ref: '#/components/schemas/FulfillmentData'
+          description: "All the information, including signatures, needed to fulfill\
+            \ an order directly onchain."
+          title: Fulfillment Data
+      required:
+      - fulfillment_data
+      - protocol
+      title: FulfillmentOutput
+      type: object
+    GenerateListingFulfillmentInput:
+      example:
+        fulfiller: ""
+        listing: ""
+      properties:
+        listing:
+          allOf:
+          - $ref: '#/components/schemas/FulfillmentInput'
+          description: Listing to get fullfillment data for.
+          title: Listing
+        fulfiller:
+          allOf:
+          - $ref: '#/components/schemas/FulfillerInput'
+          description: Fulfiller address.
+          title: Fulfiller
+      required:
+      - fulfiller
+      - listing
+      title: GenerateListingFulfillmentInput
+      type: object
+    GenerateOfferFulfillmentInput:
+      additionalProperties: false
+      example:
+        offer: ""
+        fulfiller: ""
+        consideration: ""
+      properties:
+        offer:
+          allOf:
+          - $ref: '#/components/schemas/FulfillmentInput'
+          description: Offer to get fullfillment data for.
+          title: Offer
+        fulfiller:
+          allOf:
+          - $ref: '#/components/schemas/FulfillerInput'
+          description: Fulfiller address.
+          title: Fulfiller
+        consideration:
+          allOf:
+          - $ref: '#/components/schemas/ConsiderationInput'
+          description: "If the offer you are fulfilling is a criteria offer, the NFT\
+            \ you are using to fulfill the offer with. The fulfiller account must\
+            \ own this NFT or the request will not succeed."
+          title: Consideration
+      required:
+      - fulfiller
+      - offer
+      title: GenerateOfferFulfillmentInput
+      type: object
+    GetCollectionStatsResponse:
+      example:
+        total: ""
+        intervals:
+        - volume: 0.8008281904610115
+          average_price: 2.3021358869347655
+          interval: "{}"
+          volume_change: 1.4658129805029452
+          sales: 5
+          volume_diff: 6.027456183070403
+          sales_diff: 5.637376656633329
+        - volume: 0.8008281904610115
+          average_price: 2.3021358869347655
+          interval: "{}"
+          volume_change: 1.4658129805029452
+          sales: 5
+          volume_diff: 6.027456183070403
+          sales_diff: 5.637376656633329
+      properties:
+        total:
+          allOf:
+          - $ref: '#/components/schemas/CollectionStatsModel'
+          description: The aggregate stats over the collection's lifetime
+          title: Total
+        intervals:
+          description: The stats for each interval
+          items:
+            $ref: '#/components/schemas/CollectionStatsIntervalModel'
+          title: Interval Stats
+          type: array
+      required:
+      - intervals
+      - total
+      title: GetCollectionStatsResponse
+      type: object
+    GetListingsResponse:
+      example:
+        next: next
+        previous: previous
+        orders:
+        - closing_date: 2000-01-23T04:56:07.000+00:00
+          taker_asset_bundle:
+            key: ""
+          side: side
+          criteria_proof:
+          - criteria_proof
+          - criteria_proof
+          expiration_time: 6
+          protocol_address: protocol_address
+          maker: ""
+          maker_asset_bundle:
+            key: ""
+          remaining_quantity: 1
+          order_hash: order_hash
+          finalized: true
+          maker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          listing_time: 0
+          protocol_data: ""
+          cancelled: true
+          taker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          created_date: 2000-01-23T04:56:07.000+00:00
+          current_price: current_price
+          taker: ""
+          order_type: ""
+          marked_invalid: true
+          relay_id: relay_id
+        - closing_date: 2000-01-23T04:56:07.000+00:00
+          taker_asset_bundle:
+            key: ""
+          side: side
+          criteria_proof:
+          - criteria_proof
+          - criteria_proof
+          expiration_time: 6
+          protocol_address: protocol_address
+          maker: ""
+          maker_asset_bundle:
+            key: ""
+          remaining_quantity: 1
+          order_hash: order_hash
+          finalized: true
+          maker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          listing_time: 0
+          protocol_data: ""
+          cancelled: true
+          taker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          created_date: 2000-01-23T04:56:07.000+00:00
+          current_price: current_price
+          taker: ""
+          order_type: ""
+          marked_invalid: true
+          relay_id: relay_id
+      properties:
+        next:
+          description: The cursor for the next page of results.
+          type: string
+        previous:
+          description: The cursor for the previous page of results.
+          type: string
+        orders:
+          items:
+            $ref: '#/components/schemas/OrderV2'
+          type: array
+      required:
+      - next
+      - orders
+      - previous
+      type: object
+    GetNftResponse:
+      example:
+        nft:
+          identifier: identifier
+          animation_url: ""
+          creator: creator
+          traits:
+          - display_type: "{}"
+            trait_count: 0
+            value: 1.4658129805029452
+            trait_type: trait_type
+            max_value: max_value
+            order: 6
+          - display_type: "{}"
+            trait_count: 0
+            value: 1.4658129805029452
+            trait_type: trait_type
+            max_value: max_value
+            order: 6
+          metadata_url: ""
+          image_url: ""
+          contract: contract
+          is_disabled: true
+          description: description
+          created_at: ""
+          owners:
+          - address: address
+            quantity: 5
+          - address: address
+            quantity: 5
+          collection: collection
+          is_nsfw: true
+          is_suspicious: true
+          updated_at: updated_at
+          name: name
+          token_standard: token_standard
+          rarity: ""
+      properties:
+        nft:
+          $ref: '#/components/schemas/DetailedNftModel'
+      required:
+      - nft
+      title: GetNftResponse
+      type: object
+    GetOfferResponse:
+      example:
+        next: next
+        previous: previous
+        orders:
+        - closing_date: 2000-01-23T04:56:07.000+00:00
+          taker_asset_bundle:
+            key: ""
+          side: side
+          criteria_proof:
+          - criteria_proof
+          - criteria_proof
+          expiration_time: 6
+          protocol_address: protocol_address
+          maker: ""
+          maker_asset_bundle:
+            key: ""
+          remaining_quantity: 1
+          order_hash: order_hash
+          finalized: true
+          maker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          listing_time: 0
+          protocol_data: ""
+          cancelled: true
+          taker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          created_date: 2000-01-23T04:56:07.000+00:00
+          current_price: current_price
+          taker: ""
+          order_type: ""
+          marked_invalid: true
+          relay_id: relay_id
+        - closing_date: 2000-01-23T04:56:07.000+00:00
+          taker_asset_bundle:
+            key: ""
+          side: side
+          criteria_proof:
+          - criteria_proof
+          - criteria_proof
+          expiration_time: 6
+          protocol_address: protocol_address
+          maker: ""
+          maker_asset_bundle:
+            key: ""
+          remaining_quantity: 1
+          order_hash: order_hash
+          finalized: true
+          maker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          listing_time: 0
+          protocol_data: ""
+          cancelled: true
+          taker_fees:
+          - account: ""
+            basis_points: basis_points
+          - account: ""
+            basis_points: basis_points
+          created_date: 2000-01-23T04:56:07.000+00:00
+          current_price: current_price
+          taker: ""
+          order_type: ""
+          marked_invalid: true
+          relay_id: relay_id
+      properties:
+        next:
+          description: The cursor for the next page of results.
+          type: string
+        previous:
+          description: The cursor for the previous page of results.
+          type: string
+        orders:
+          items:
+            $ref: '#/components/schemas/OrderV2'
+          type: array
+      required:
+      - next
+      - orders
+      - previous
+      type: object
+    GetOrderResult:
+      example:
+        order:
+          chain: ""
+          price:
+            current: ""
+          protocol_address: protocol_address
+          protocol_data: ""
+          type: {}
+          order_hash: order_hash
+      properties:
+        order:
+          $ref: '#/components/schemas/Order'
+      required:
+      - order
+      title: GetOrderResult
+      type: object
+    GetTraitResponse:
+      example:
+        counts:
+          key:
+            key: 0
+        categories:
+          key: "{}"
+      properties:
+        categories:
+          additionalProperties:
+            $ref: '#/components/schemas/CategoryType'
+          default: {}
+          description: "List of trait categories, e.g. Background, in the collection\
+            \ and their type, e.g. string"
+          type: object
+        counts:
+          additionalProperties:
+            additionalProperties:
+              type: integer
+            type: object
+          default:
+            face:
+              glasses: 1
+          description: "If the category type is STRING, the dict will contain each\
+            \ trait value and its count. Otherwise, the dict will contain the min\
+            \ and max value seen in the collection"
+          title: Counts
+          type: object
+      title: GetTraitResponse
+      type: object
+    ItemType:
+      description: |-
+        0 - Native - Ether (or other native token for the given chain)
+        1 - ERC20
+        2 - ERC721
+        3 - ERC1155
+        4 - ERC721 with criteria
+        5 - ERC1155 with criteria
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      properties: {}
+      title: ItemType
+      type: integer
+    ListCollectionsResponse:
+      example:
+        next: next
+        collections:
+        - owner: owner
+          opensea_url: opensea_url
+          safelist_status: {}
+          wiki_url: ""
+          is_disabled: true
+          twitter_username: ""
+          description: ""
+          project_url: ""
+          collection: collection
+          contracts:
+          - chain: ""
+            address: address
+          - chain: ""
+            address: address
+          discord_url: ""
+          is_nsfw: true
+          trait_offers_enabled: true
+          telegram_url: ""
+          name: name
+          category: category
+          instagram_username: ""
+        - owner: owner
+          opensea_url: opensea_url
+          safelist_status: {}
+          wiki_url: ""
+          is_disabled: true
+          twitter_username: ""
+          description: ""
+          project_url: ""
+          collection: collection
+          contracts:
+          - chain: ""
+            address: address
+          - chain: ""
+            address: address
+          discord_url: ""
+          is_nsfw: true
+          trait_offers_enabled: true
+          telegram_url: ""
+          name: name
+          category: category
+          instagram_username: ""
+      properties:
+        collections:
+          items:
+            $ref: '#/components/schemas/CollectionModel'
+          title: Collection
+          type: array
+        next:
+          description: Cursor for the next page of results
+          title: Next
+          type: string
+      required:
+      - collections
+      - next
+      title: ListCollectionsResponse
+      type: object
+    ListEventsResponse:
+      example:
+        next: next
+        asset_events:
+        - chain: ""
+          event_type: ""
+          order_hash: order_hash
+        - chain: ""
+          event_type: ""
+          order_hash: order_hash
+      properties:
+        asset_events:
+          items:
+            $ref: '#/components/schemas/Events_inner'
+          title: Events
+          type: array
+        next:
+          description: Cursor for the next page of results
+          title: Next
+          type: string
+      required:
+      - asset_events
+      - next
+      title: ListEventsResponse
+      type: object
+    ListNftsResponse:
+      example:
+        next: next
+        nfts:
+        - identifier: identifier
+          is_nsfw: true
+          metadata_url: ""
+          updated_at: updated_at
+          image_url: ""
+          contract: contract
+          is_disabled: true
+          name: name
+          token_standard: token_standard
+          description: description
+          created_at: ""
+          collection: collection
+        - identifier: identifier
+          is_nsfw: true
+          metadata_url: ""
+          updated_at: updated_at
+          image_url: ""
+          contract: contract
+          is_disabled: true
+          name: name
+          token_standard: token_standard
+          description: description
+          created_at: ""
+          collection: collection
+      properties:
+        nfts:
+          items:
+            $ref: '#/components/schemas/NftModel'
+          title: NFT
+          type: array
+        next:
+          description: Cursor for the next page of results
+          title: Next
+          type: string
+      required:
+      - next
+      - nfts
+      title: ListNftsResponse
+      type: object
+    Listing:
+      example:
+        chain: ""
+        price:
+          current: ""
+        protocol_address: protocol_address
+        protocol_data: ""
+        type: {}
+        order_hash: order_hash
+      properties:
+        order_hash:
+          description: Order hash
+          title: Order Hash
+          type: string
+        chain:
+          allOf:
+          - $ref: '#/components/schemas/ChainIdentifier'
+          description: Chain the listing is on.
+        type:
+          $ref: '#/components/schemas/core__types__OrderType'
+        price:
+          $ref: '#/components/schemas/BasicListingPrice'
+        protocol_data:
+          allOf:
+          - $ref: '#/components/schemas/SerializedOrder'
+          description: The onchain order data.
+          title: Protocol Data
+        protocol_address:
+          description: Exchange contract address
+          title: Protocol Address
+          type: string
+      required:
+      - chain
+      - order_hash
+      - price
+      - protocol_address
+      - protocol_data
+      - type
+      title: Listing
+      type: object
+    NftModel:
+      example:
+        identifier: identifier
+        is_nsfw: true
+        metadata_url: ""
+        updated_at: updated_at
+        image_url: ""
+        contract: contract
+        is_disabled: true
+        name: name
+        token_standard: token_standard
+        description: description
+        created_at: ""
+        collection: collection
+      properties:
+        identifier:
+          description: The NFT's unique identifier within the smart contract (also
+            referred to as token_id)
+          title: Identifier
+          type: string
+        collection:
+          description: Collection slug. A unique string to identify a collection on
+            OpenSea
+          title: Collection
+          type: string
+        contract:
+          description: The unique public blockchain identifier for the contract
+          title: Contract
+          type: string
+        token_standard:
+          description: "ERC standard of the token (erc721, erc1155)"
+          title: Token Standard
+          type: string
+        name:
+          description: Name of the NFT
+          title: Name
+          type: string
+        description:
+          description: Description of the NFT
+          title: Description
+          type: string
+        image_url:
+          default: ""
+          description: Link to the image associated with the NFT
+          title: Image Url
+          type: string
+        metadata_url:
+          default: ""
+          description: Link to the offchain metadata store
+          title: Metadata Url
+          type: string
+        created_at:
+          allOf:
+          - $ref: '#/components/schemas/CreatedAtEnum'
+          default: ' '
+          description: Deprecated Field
+          title: Created At
+        updated_at:
+          description: Last time that the NFT's metadata was updated by OpenSea
+          title: Updated At
+          type: string
+        is_disabled:
+          description: If the item is currently able to be bought or sold using OpenSea
+          title: Is Disabled
+          type: boolean
+        is_nsfw:
+          description: If the item is currently classified as 'Not Safe for Work'
+            by OpenSea
+          title: Is Nsfw
+          type: boolean
+      required:
+      - collection
+      - contract
+      - description
+      - identifier
+      - is_disabled
+      - is_nsfw
+      - name
+      - token_standard
+      - updated_at
+      title: NftModel
+      type: object
+    Offer:
+      example:
+        chain: {}
+        criteria: ""
+        protocol_address: protocol_address
+        protocol_data: ""
+        order_hash: order_hash
+      properties:
+        order_hash:
+          description: Order hash
+          title: Order Hash
+          type: string
+        chain:
+          $ref: '#/components/schemas/ChainIdentifier'
+        criteria:
+          allOf:
+          - $ref: '#/components/schemas/Criteria'
+          description: Criteria for collection or trait offers
+          title: Criteria
+        protocol_data:
+          allOf:
+          - $ref: '#/components/schemas/SerializedOrder'
+          description: The onchain order data.
+          title: Protocol Data
+        protocol_address:
+          description: Exchange contract address
+          title: Protocol Address
+          type: string
+      required:
+      - chain
+      - order_hash
+      - protocol_address
+      - protocol_data
+      title: Offer
+      type: object
+    OfferItem:
+      properties:
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+        token:
+          description: The item's token contract (with the null address used for native
+            tokens)
+          title: Token
+          type: string
+        identifierOrCriteria:
+          description: "The ERC721 or ERC1155 token identifier or, in the case of\
+            \ a criteria-based item type, a merkle root composed of the valid set\
+            \ of token identifiers for the item. This value will be ignored for Ether\
+            \ and ERC20 item types, and can optionally be zero for criteria-based\
+            \ item types to allow for any identifier."
+          title: Identifierorcriteria
+          type: integer
+        startAmount:
+          description: The amount of the token in question that will be required should
+            the order be fulfilled.
+          title: Startamount
+          type: integer
+        endAmount:
+          description: "When endAmount differs from `startAmount`, the realized amount\
+            \ is calculated linearly based on the time elapsed since the order became\
+            \ active."
+          title: Endamount
+          type: integer
+      required:
+      - endAmount
+      - identifierOrCriteria
+      - itemType
+      - startAmount
+      - token
+      title: OfferItem
+      type: object
+    OfferList:
+      example:
+        offers:
+        - chain: {}
+          criteria: ""
+          protocol_address: protocol_address
+          protocol_data: ""
+          order_hash: order_hash
+        - chain: {}
+          criteria: ""
+          protocol_address: protocol_address
+          protocol_data: ""
+          order_hash: order_hash
+      properties:
+        offers:
+          items:
+            $ref: '#/components/schemas/Offer'
+          title: Offers
+          type: array
+      required:
+      - offers
+      title: Offer List
+      type: object
+    OrderEventModel:
+      properties:
+        event_type:
+          allOf:
+          - $ref: '#/components/schemas/OrderEventModelEventTypeEnum'
+          default: order
+          title: Event Type
+        order_hash:
+          description: Order hash for the newly created order
+          title: Order Hash
+          type: string
+        order_type:
+          $ref: '#/components/schemas/OrderType'
+        chain:
+          allOf:
+          - $ref: '#/components/schemas/ChainIdentifier'
+          description: The chain on which the order was created
+        protocol_address:
+          description: Exchange contract address for the order
+          title: Protocol Address
+          type: string
+        start_date:
+          description: The Posix timestamp at which the order was created
+          title: Start Date
+          type: integer
+        expiration_date:
+          description: "The Posix timestamp at which the order will close. When no\
+            \ expiration date is set, this value will be 0."
+          title: Expiration Date
+          type: integer
+        asset:
+          $ref: '#/components/schemas/Asset'
+        quantity:
+          description: Number of assets in the order
+          title: Quantity
+          type: integer
+        maker:
+          description: Maker of the order
+          title: Maker
+          type: string
+        taker:
+          description: Taker of the order. This will only be set for private listings.
+          title: Taker
+          type: string
+        payment:
+          allOf:
+          - $ref: '#/components/schemas/EventPaymentModel'
+          title: Payment
+        criteria:
+          $ref: '#/components/schemas/Criteria_1'
+      required:
+      - asset
+      - chain
+      - criteria
+      - expiration_date
+      - maker
+      - order_hash
+      - order_type
+      - payment
+      - protocol_address
+      - quantity
+      - start_date
+      - taker
+      title: OrderEventModel
+      type: object
+    OrderEventModelEventTypeEnum:
+      enum:
+      - order
+      type: string
+    OrderInput:
+      properties:
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/OrderInputComponents'
+          title: Order Components
+        signature:
+          description: Signature of the signed type data represented by the parameters
+            field.
+          title: Signature
+          type: string
+      required:
+      - parameters
+      - signature
+      title: OrderInput
+      type: object
+    OrderInputComponents:
+      properties:
+        offerer:
+          description: The address which supplies all the items in the offer.
+          title: Offerer
+          type: string
+        offer:
+          description: Array of items that may be transferred from the offerer's account.
+          items:
+            $ref: '#/components/schemas/OfferItem'
+          title: Offer
+          type: array
+        consideration:
+          description: Array of items which must be received by a recipient to fulfill
+            the order. One of the consideration items must be the OpenSea marketplace
+            fee.
+          items:
+            $ref: '#/components/schemas/ConsiderationItem'
+          title: Consideration
+          type: array
+        startTime:
+          description: The block timestamp at which the order becomes active
+          title: Starttime
+          type: integer
+        endTime:
+          description: The block timestamp at which the order expires.
+          title: Endtime
+          type: integer
+        orderType:
+          $ref: '#/components/schemas/OrderType'
+        zone:
+          description: |-
+            Optional secondary account attached the order which can cancel orders. Additionally, when the `OrderType` is Restricted, the zone or the offerer are the only entities which can execute the order.
+            For open orders, use the zero address.
+            For restricted orders, use the signed zone address <SIGNED_ZONE_ADDRESS>
+          title: Zone
+          type: string
+        zoneHash:
+          description: A value that will be supplied to the zone when fulfilling restricted
+            orders that the zone can utilize when making a determination on whether
+            to authorize the order. Most often this value will be the zero hash 0x0000000000000000000000000000000000000000000000000000000000000000
+          title: Zonehash
+          type: string
+        salt:
+          description: an arbitrary source of entropy for the order
+          title: Salt
+          type: string
+        conduitKey:
+          description: "Indicates what conduit, if any, should be utilized as a source\
+            \ for token approvals when performing transfers. By default (i.e. when\
+            \ conduitKey is set to the zero hash), the offerer will grant transfer\
+            \ approvals to Seaport directly. \nTo utilize OpenSea's conduit, use 0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000"
+          title: Conduitkey
+          type: string
+        totalOriginalConsiderationItems:
+          description: Size of the consideration array.
+          title: Totaloriginalconsiderationitems
+          type: integer
+        counter:
+          description: "Must match the current counter for the given offerer. If you\
+            \ are unsure of the current counter, it can be [read from the contract](https://etherscan.io/address/0x00000000000000adc04c56bf30ac9d3c0aaf14dc#readContract#F2)\
+            \ on etherscan."
+          title: Counter
+          type: string
+      required:
+      - conduitKey
+      - consideration
+      - counter
+      - endTime
+      - offer
+      - offerer
+      - orderType
+      - salt
+      - startTime
+      - zone
+      - zoneHash
+      title: OrderInputComponents
+      type: object
+    OrderInputWithProtocol:
+      example:
+        signature: signature
+        protocol_address: protocol_address
+        parameters: ""
+      properties:
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/OrderInputComponents'
+          title: Order Components
+        signature:
+          description: Signature of the signed type data represented by the parameters
+            field.
+          title: Signature
+          type: string
+        protocol_address:
+          description: "Exchange contract address. Must be one of ['0x00000000000000adc04c56bf30ac9d3c0aaf14dc']"
+          title: Protocol Address
+          type: string
+      required:
+      - parameters
+      - protocol_address
+      - signature
+      title: OrderInputWithProtocol
+      type: object
+    OrderType:
+      description: An enumeration.
+      enum:
+      - listing
+      - auction
+      - item_offer
+      - collection_offer
+      - trait_offer
+      properties: {}
+      title: OrderType
+      type: string
+    OrderTypeEnum:
+      description: |-
+        * `basic` - basic
+        * `dutch` - dutch
+        * `english` - english
+        * `criteria` - criteria
+      enum:
+      - basic
+      - dutch
+      - english
+      - criteria
+      type: string
+    OrderV2:
+      description: Models OrderV2 objects to serialize to a 'similar' schema to what
+        we have with OrderV1s
+      example:
+        closing_date: 2000-01-23T04:56:07.000+00:00
+        taker_asset_bundle:
+          key: ""
+        side: side
+        criteria_proof:
+        - criteria_proof
+        - criteria_proof
+        expiration_time: 6
+        protocol_address: protocol_address
+        maker: ""
+        maker_asset_bundle:
+          key: ""
+        remaining_quantity: 1
+        order_hash: order_hash
+        finalized: true
+        maker_fees:
+        - account: ""
+          basis_points: basis_points
+        - account: ""
+          basis_points: basis_points
+        listing_time: 0
+        protocol_data: ""
+        cancelled: true
+        taker_fees:
+        - account: ""
+          basis_points: basis_points
+        - account: ""
+          basis_points: basis_points
+        created_date: 2000-01-23T04:56:07.000+00:00
+        current_price: current_price
+        taker: ""
+        order_type: ""
+        marked_invalid: true
+        relay_id: relay_id
+      properties:
+        created_date:
+          description: Date the order was created
+          format: date-time
+          type: string
+        closing_date:
+          description: Date the order was closed
+          format: date-time
+          type: string
+        listing_time:
+          description: Timestamp representation of created_date
+          readOnly: true
+          type: integer
+        expiration_time:
+          description: Timestamp representation of closing_date
+          readOnly: true
+          type: integer
+        order_hash:
+          description: An identifier for the order
+          type: string
+        protocol_data:
+          allOf:
+          - $ref: '#/components/schemas/SerializedOrder'
+          readOnly: true
+        protocol_address:
+          description: Exchange Contract Address. Typically the address of the Seaport
+            contract.
+          nullable: true
+          readOnly: true
+          type: string
+        current_price:
+          description: Current price of the order
+          type: string
+        maker:
+          allOf:
+          - $ref: '#/components/schemas/SimpleAccount'
+          description: "The unique blockchain identifier, address, of the wallet which\
+            \ is the order maker."
+          readOnly: true
+        taker:
+          allOf:
+          - $ref: '#/components/schemas/SimpleAccount'
+          description: "The unique blockchain identifier, address, of the wallet which\
+            \ is the order taker."
+          readOnly: true
+        maker_fees:
+          items:
+            $ref: '#/components/schemas/SimpleFee'
+          readOnly: true
+          type: array
+        taker_fees:
+          items:
+            $ref: '#/components/schemas/SimpleFee'
+          readOnly: true
+          type: array
+        side:
+          description: "The side of the order, either bid (offer) or ask(listing)."
+          type: string
+        order_type:
+          allOf:
+          - $ref: '#/components/schemas/OrderTypeEnum'
+          readOnly: true
+        cancelled:
+          description: "If true, the order maker has canceled the order which means\
+            \ it can no longer be filled."
+          type: boolean
+        finalized:
+          description: "If true, the order has already been filled."
+          type: boolean
+        marked_invalid:
+          description: "If true, the order is currently invalid and can not be filled."
+          readOnly: true
+          type: boolean
+        remaining_quantity:
+          description: The remaining quantity of the order that has not been filled.
+            This is useful for erc1155 orders.
+          type: integer
+        relay_id:
+          description: Deprecated Field
+          readOnly: true
+          type: string
+        criteria_proof:
+          description: A merkle root composed of the valid set of token identifiers
+            for the order
+          items:
+            type: string
+          nullable: true
+          readOnly: true
+          type: array
+        maker_asset_bundle:
+          additionalProperties: {}
+          description: Deprecated Field.
+          readOnly: true
+          type: object
+        taker_asset_bundle:
+          additionalProperties: {}
+          description: Deprecated Field.
+          readOnly: true
+          type: object
+      required:
+      - cancelled
+      - closing_date
+      - created_date
+      - criteria_proof
+      - current_price
+      - expiration_time
+      - finalized
+      - listing_time
+      - maker
+      - maker_asset_bundle
+      - maker_fees
+      - marked_invalid
+      - order_hash
+      - order_type
+      - protocol_address
+      - protocol_data
+      - relay_id
+      - remaining_quantity
+      - side
+      - taker
+      - taker_asset_bundle
+      - taker_fees
+      type: object
+    OwnerModel:
+      example:
+        address: address
+        quantity: 5
+      properties:
+        address:
+          description: The unique public blockchain identifier for the owner wallet
+          title: Address
+          type: string
+        quantity:
+          description: 'The number of tokens owned '
+          title: Quantity
+          type: integer
+      required:
+      - address
+      - quantity
+      title: OwnerModel
+      type: object
+    PaginatedListingList:
+      example:
+        next: next
+        listings:
+        - chain: ""
+          price:
+            current: ""
+          protocol_address: protocol_address
+          protocol_data: ""
+          type: {}
+          order_hash: order_hash
+        - chain: ""
+          price:
+            current: ""
+          protocol_address: protocol_address
+          protocol_data: ""
+          type: {}
+          order_hash: order_hash
+      properties:
+        listings:
+          description: OpenSea Listings
+          items:
+            $ref: '#/components/schemas/Listing'
+          title: Listings
+          type: array
+        next:
+          description: Cursor for the next page of results
+          title: Next
+          type: string
+      required:
+      - listings
+      - next
+      title: Paginated Listing List
+      type: object
+    PaginatedOfferList:
+      example:
+        offers:
+        - chain: {}
+          criteria: ""
+          protocol_address: protocol_address
+          protocol_data: ""
+          order_hash: order_hash
+        - chain: {}
+          criteria: ""
+          protocol_address: protocol_address
+          protocol_data: ""
+          order_hash: order_hash
+        next: next
+      properties:
+        offers:
+          items:
+            $ref: '#/components/schemas/Offer'
+          title: Offers
+          type: array
+        next:
+          description: Cursor for the next page of results
+          title: Next
+          type: string
+      required:
+      - next
+      - offers
+      title: Paginated Offer List
+      type: object
+    PartialParameters:
+      properties:
+        consideration:
+          description: One of the consideration items used when creating criteria
+            offers.
+          items:
+            $ref: '#/components/schemas/SerializedConsiderationItem'
+          title: Consideration
+          type: array
+        zone:
+          description: |-
+            Optional secondary account attached the order which can cancel orders. Additionally, when the `OrderType` is Restricted, the zone or the offerer are the only entities which can execute the order.
+            For open orders, use the zero address.
+            For restricted orders, use the signed zone address 0x000000e7ec00e7b300774b00001314b8610022b8
+          title: Zone
+          type: string
+        zoneHash:
+          description: A value that will be supplied to the zone when fulfilling restricted
+            orders that the zone can utilize when making a determination on whether
+            to authorize the order. Most often this value will be the zero hash 0x0000000000000000000000000000000000000000000000000000000000000000
+          title: Zonehash
+          type: string
+      required:
+      - consideration
+      - zone
+      - zoneHash
+      title: PartialParameters
+      type: object
+    PostCriteriaOfferInput:
+      additionalProperties: false
+      example:
+        criteria: ""
+        protocol_address: protocol_address
+        protocol_data: ""
+      properties:
+        protocol_data:
+          allOf:
+          - $ref: '#/components/schemas/OrderInput'
+          description: The signed order which will be submitted to Seaport
+          title: Signed Seaport Order
+        criteria:
+          allOf:
+          - $ref: '#/components/schemas/Criteria'
+          description: Criteria for the collection or trait offer
+          title: Criteria
+        protocol_address:
+          description: "Exchange contract address. Must be one of ['0x00000000000000adc04c56bf30ac9d3c0aaf14dc']"
+          title: Protocol Address
+          type: string
+      required:
+      - criteria
+      - protocol_address
+      - protocol_data
+      title: PostCriteriaOfferInput
+      type: object
+    PriceModel:
+      properties:
+        currency:
+          title: Currency
+          type: string
+        decimals:
+          title: Decimals
+          type: integer
+        value:
+          title: Value
+          type: string
+      required:
+      - currency
+      - decimals
+      - value
+      title: PriceModel
+      type: object
+    RankingFeatures:
+      properties:
+        unique_attribute_count:
+          default: 0
+          description: Deprecated Field.
+          title: Unique Attribute Count
+          type: integer
+      title: RankingFeatures
+      type: object
+    RarityDataModel:
+      properties:
+        strategy_id:
+          allOf:
+          - $ref: '#/components/schemas/RarityStrategyId'
+          description: Deprecated Field
+        strategy_version:
+          description: Deprecated Field
+          title: Strategy Version
+          type: string
+        rank:
+          description: Rarity Rank of the NFT in the collection
+          title: Rank
+          type: integer
+        score:
+          description: Deprecated Field
+          title: Score
+          type: number
+        calculated_at:
+          default: ""
+          description: Deprecated Field
+          title: Calculated At
+          type: string
+        max_rank:
+          description: Deprecated Field
+          title: Max Rank
+          type: integer
+        total_supply:
+          default: 0
+          description: Deprecated Field
+          title: Total Supply
+          type: integer
+        ranking_features:
+          allOf:
+          - $ref: '#/components/schemas/RankingFeatures'
+          description: Deprecated Field
+          title: Ranking Features
+      required:
+      - rank
+      title: RarityDataModel
+      type: object
+    RarityStrategyId:
+      description: "Rarity algorithm used. Currently, always 'openrarity'"
+      enum:
+      - openrarity
+      properties: {}
+      title: RarityStrategyId
+      type: string
+    RedemptionEventModel:
+      properties:
+        event_type:
+          allOf:
+          - $ref: '#/components/schemas/RedemptionEventModelEventTypeEnum'
+          default: redemption
+          title: Event Type
+        chain:
+          allOf:
+          - $ref: '#/components/schemas/ChainIdentifier'
+          description: The chain on which the rededemption occurred
+        from_address:
+          description: Address of the sender
+          title: From Address
+          type: string
+        to_address:
+          description: Address of the recipient
+          title: To Address
+          type: string
+        asset:
+          $ref: '#/components/schemas/Asset_1'
+        quantity:
+          description: Number of assets redeemed
+          title: Quantity
+          type: integer
+        transaction:
+          description: Transaction hash for the redemption
+          title: Transaction
+          type: string
+      required:
+      - asset
+      - chain
+      - from_address
+      - quantity
+      - to_address
+      - transaction
+      title: RedemptionEventModel
+      type: object
+    RedemptionEventModelEventTypeEnum:
+      enum:
+      - redemption
+      type: string
+    SafelistRequestStatus:
+      description: Status of the collection verification requests.
+      enum:
+      - not_requested
+      - requested
+      - approved
+      - verified
+      - disabled_top_trending
+      example: {}
+      properties: {}
+      title: SafelistRequestStatus
+      type: string
+    SaleEventModel:
+      properties:
+        event_type:
+          allOf:
+          - $ref: '#/components/schemas/SaleEventModelEventTypeEnum'
+          default: sale
+          title: Event Type
+        order_hash:
+          description: Order hash for the order which was fulfilled
+          title: Order Hash
+          type: string
+        chain:
+          allOf:
+          - $ref: '#/components/schemas/ChainIdentifier'
+          description: The chain on which the order was fulfilled
+        protocol_address:
+          description: Exchange contract address which fulfilled the order
+          title: Protocol Address
+          type: string
+        closing_date:
+          description: The Posix timestamp at which the transaction which filled the
+            order occurred
+          title: Closing Date
+          type: integer
+        quantity:
+          description: Number of assets transferred
+          title: Quantity
+          type: integer
+        maker:
+          description: Maker of the order
+          title: Maker
+          type: string
+        taker:
+          description: Taker of the order
+          title: Taker
+          type: string
+        payment:
+          allOf:
+          - $ref: '#/components/schemas/EventPaymentModel'
+          title: Payment
+        transaction:
+          description: Transaction hash for the order fulfillment
+          title: Transaction
+          type: string
+      required:
+      - chain
+      - closing_date
+      - maker
+      - order_hash
+      - payment
+      - protocol_address
+      - quantity
+      - taker
+      - transaction
+      title: SaleEventModel
+      type: object
+    SaleEventModelEventTypeEnum:
+      enum:
+      - sale
+      type: string
+    SerializedConsiderationItem:
+      properties:
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+        token:
+          description: The item's token contract (with the null address used for native
+            tokens)
+          title: Token
+          type: string
+        identifierOrCriteria:
+          description: "The ERC721 or ERC1155 token identifier or, in the case of\
+            \ a criteria-based item type, a merkle root composed of the valid set\
+            \ of token identifiers for the item. This value will be ignored for Ether\
+            \ and ERC20 item types, and can optionally be zero for criteria-based\
+            \ item types to allow for any identifier."
+          title: Identifierorcriteria
+          type: string
+        startAmount:
+          description: The amount of the token in question that will be required should
+            the order be fulfilled.
+          title: Startamount
+          type: string
+        endAmount:
+          description: "When endAmount differs from `startAmount`, the realized amount\
+            \ is calculated linearly based on the time elapsed since the order became\
+            \ active."
+          title: Endamount
+          type: string
+        recipient:
+          description: The address which will receive the consideration item when
+            the order is executed.
+          title: Recipient
+          type: string
+      required:
+      - endAmount
+      - identifierOrCriteria
+      - itemType
+      - recipient
+      - startAmount
+      - token
+      title: SerializedConsiderationItem
+      type: object
+    SerializedOfferItem:
+      properties:
+        itemType:
+          $ref: '#/components/schemas/ItemType'
+        token:
+          description: The item's token contract (with the null address used for native
+            tokens)
+          title: Token
+          type: string
+        identifierOrCriteria:
+          description: "The ERC721 or ERC1155 token identifier or, in the case of\
+            \ a criteria-based item type, a merkle root composed of the valid set\
+            \ of token identifiers for the item. This value will be ignored for Ether\
+            \ and ERC20 item types, and can optionally be zero for criteria-based\
+            \ item types to allow for any identifier."
+          title: Identifierorcriteria
+          type: string
+        startAmount:
+          description: The amount of the token in question that will be required should
+            the order be fulfilled.
+          title: Startamount
+          type: string
+        endAmount:
+          description: "When endAmount differs from `startAmount`, the realized amount\
+            \ is calculated linearly based on the time elapsed since the order became\
+            \ active."
+          title: Endamount
+          type: string
+      required:
+      - endAmount
+      - identifierOrCriteria
+      - itemType
+      - startAmount
+      - token
+      title: SerializedOfferItem
+      type: object
+    SerializedOrder:
+      properties:
+        parameters:
+          allOf:
+          - $ref: '#/components/schemas/SerializedOrderComponents'
+          title: Order
+        signature:
+          description: The order maker's signature used to validate the order.
+          title: Signature
+          type: string
+      required:
+      - parameters
+      title: SerializedOrder
+      type: object
+    SerializedOrderComponents:
+      properties:
+        offerer:
+          description: The address which supplies all the items in the offer.
+          title: Offerer
+          type: string
+        offer:
+          items:
+            $ref: '#/components/schemas/SerializedOfferItem'
+          title: Offer
+          type: array
+        consideration:
+          items:
+            $ref: '#/components/schemas/SerializedConsiderationItem'
+          title: Consideration
+          type: array
+        startTime:
+          description: The block timestamp at which the order becomes active
+          title: Starttime
+          type: string
+        endTime:
+          description: The block timestamp at which the order expires
+          title: Endtime
+          type: string
+        orderType:
+          $ref: '#/components/schemas/core__blockchain__evm__abi__models__seaport__OrderType'
+        zone:
+          description: |-
+            Optional secondary account attached the order which can cancel orders. Additionally, when the `OrderType` is Restricted, the zone or the offerer are the only entities which can execute the order.
+            For open orders, use the zero address.
+            For restricted orders, use the signed zone address <SIGNED_ZONE_ADDRESS>
+          title: Zone
+          type: string
+        zoneHash:
+          description: A value that will be supplied to the zone when fulfilling restricted
+            orders that the zone can utilize when making a determination on whether
+            to authorize the order. Most often this value will be the zero hash 0x0000000000000000000000000000000000000000000000000000000000000000
+          title: Zonehash
+          type: string
+        salt:
+          description: an arbitrary source of entropy for the order
+          title: Salt
+          type: string
+        conduitKey:
+          description: "Indicates what conduit, if any, should be utilized as a source\
+            \ for token approvals when performing transfers. By default (i.e. when\
+            \ conduitKey is set to the zero hash), the offerer will grant transfer\
+            \ approvals to Seaport directly. \nTo utilize OpenSea's conduit, use 0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000"
+          title: Conduitkey
+          type: string
+        totalOriginalConsiderationItems:
+          description: Size of the consideration array.
+          title: Totaloriginalconsiderationitems
+          type: integer
+        counter:
+          $ref: '#/components/schemas/Counter'
+      required:
+      - conduitKey
+      - consideration
+      - counter
+      - endTime
+      - offer
+      - offerer
+      - orderType
+      - salt
+      - startTime
+      - zone
+      - zoneHash
+      title: SerializedOrderComponents
+      type: object
+    SignedSimpleOrderV2:
+      description: OpenSea Order Object
+      example:
+        closing_date: 2000-01-23T04:56:07.000+00:00
+        side: side
+        criteria_proof:
+        - criteria_proof
+        - criteria_proof
+        expiration_time: 6
+        protocol_address: protocol_address
+        maker: ""
+        remaining_quantity: 1
+        order_hash: order_hash
+        finalized: true
+        maker_fees:
+        - account: ""
+          basis_points: basis_points
+        - account: ""
+          basis_points: basis_points
+        listing_time: 0
+        protocol_data: ""
+        cancelled: true
+        taker_fees:
+        - account: ""
+          basis_points: basis_points
+        - account: ""
+          basis_points: basis_points
+        created_date: 2000-01-23T04:56:07.000+00:00
+        current_price: current_price
+        taker: ""
+        order_type: ""
+        marked_invalid: true
+        relay_id: relay_id
+      properties:
+        created_date:
+          description: Date the order was created
+          format: date-time
+          type: string
+        closing_date:
+          description: Date the order was closed
+          format: date-time
+          type: string
+        listing_time:
+          description: Timestamp representation of created_date
+          readOnly: true
+          type: integer
+        expiration_time:
+          description: Timestamp representation of closing_date
+          readOnly: true
+          type: integer
+        order_hash:
+          description: An identifier for the order
+          type: string
+        protocol_data:
+          allOf:
+          - $ref: '#/components/schemas/SerializedOrder'
+          readOnly: true
+        protocol_address:
+          description: Exchange Contract Address. Typically the address of the Seaport
+            contract.
+          nullable: true
+          readOnly: true
+          type: string
+        current_price:
+          description: Current price of the order
+          type: string
+        maker:
+          allOf:
+          - $ref: '#/components/schemas/SimpleAccount'
+          description: "The unique blockchain identifier, address, of the wallet which\
+            \ is the order maker."
+          readOnly: true
+        taker:
+          allOf:
+          - $ref: '#/components/schemas/SimpleAccount'
+          description: "The unique blockchain identifier, address, of the wallet which\
+            \ is the order taker."
+          readOnly: true
+        maker_fees:
+          items:
+            $ref: '#/components/schemas/SimpleFee'
+          readOnly: true
+          type: array
+        taker_fees:
+          items:
+            $ref: '#/components/schemas/SimpleFee'
+          readOnly: true
+          type: array
+        side:
+          description: "The side of the order, either bid (offer) or ask(listing)."
+          type: string
+        order_type:
+          allOf:
+          - $ref: '#/components/schemas/OrderTypeEnum'
+          readOnly: true
+        cancelled:
+          description: "If true, the order maker has canceled the order which means\
+            \ it can no longer be filled."
+          type: boolean
+        finalized:
+          description: "If true, the order has already been filled."
+          type: boolean
+        marked_invalid:
+          description: "If true, the order is currently invalid and can not be filled."
+          readOnly: true
+          type: boolean
+        remaining_quantity:
+          description: The remaining quantity of the order that has not been filled.
+            This is useful for erc1155 orders.
+          type: integer
+        relay_id:
+          description: Deprecated Field
+          readOnly: true
+          type: string
+        criteria_proof:
+          description: A merkle root composed of the valid set of token identifiers
+            for the order
+          items:
+            type: string
+          nullable: true
+          readOnly: true
+          type: array
+      required:
+      - cancelled
+      - closing_date
+      - created_date
+      - criteria_proof
+      - current_price
+      - expiration_time
+      - finalized
+      - listing_time
+      - maker
+      - maker_fees
+      - marked_invalid
+      - order_hash
+      - order_type
+      - protocol_address
+      - protocol_data
+      - relay_id
+      - remaining_quantity
+      - side
+      - taker
+      - taker_fees
+      type: object
+    SimpleAccount:
+      properties:
+        user:
+          nullable: true
+          readOnly: true
+          type: integer
+        profile_img_url:
+          description: "A placeholder image. For the actual profile image, call the\
+            \ Get Account endpoint."
+          readOnly: true
+          type: string
+        address:
+          description: "The unique blockchain identifier, address, of the account."
+          readOnly: true
+          type: string
+        config:
+          allOf:
+          - $ref: '#/components/schemas/ConfigEnum'
+          readOnly: true
+      required:
+      - address
+      - config
+      - profile_img_url
+      - user
+      type: object
+    SimpleFee:
+      example:
+        account: ""
+        basis_points: basis_points
+      properties:
+        account:
+          allOf:
+          - $ref: '#/components/schemas/SimpleAccount'
+          readOnly: true
+        basis_points:
+          type: string
+      required:
+      - account
+      - basis_points
+      type: object
+    SocialMediaAccountModel:
+      example:
+        platform: platform
+        username: username
+      properties:
+        platform:
+          description: "The social media platform, e.g. twitter or instagram"
+          title: Platform
+          type: string
+        username:
+          description: The username for the social media platform
+          title: Username
+          type: string
+      required:
+      - platform
+      - username
+      title: SocialMediaAccountModel
+      type: object
+    Trait:
+      properties:
+        type:
+          title: Type
+          type: string
+        value:
+          title: Value
+          type: string
+      required:
+      - type
+      - value
+      title: Trait
+      type: object
+    TraitModel:
+      example:
+        display_type: "{}"
+        trait_count: 0
+        value: 1.4658129805029452
+        trait_type: trait_type
+        max_value: max_value
+        order: 6
+      properties:
+        trait_type:
+          description: The name of the trait category (e.g. 'Background')
+          maxLength: 150
+          title: Trait Type
+          type: string
+        display_type:
+          $ref: '#/components/schemas/DisplayTypeField'
+        max_value:
+          description: Ceiling for possible numeric trait values
+          title: Max Value
+          type: string
+        trait_count:
+          description: Deprecated Field. Use Get Collection API instead.
+          title: Trait Count
+          type: integer
+        order:
+          description: Deprecated Field
+          title: Order
+          type: integer
+        value:
+          $ref: '#/components/schemas/Value'
+      required:
+      - max_value
+      - pk
+      - trait_type
+      - value
+      title: TraitModel
+      type: object
+    Transaction:
+      properties:
+        function:
+          description: Seaport protocol contract method to use to fulfill the order.
+          title: Function
+          type: string
+        chain:
+          description: Numeric Chain Identifier.
+          title: Chain
+          type: integer
+        to:
+          description: Protocol contract address to use fto fulfill the order.
+          title: To
+          type: string
+        value:
+          description: Wei value of the transaction.
+          title: Value
+          type: integer
+        input_data:
+          description: Decoded Call Data.
+          title: Input Data
+          type: object
+      required:
+      - chain
+      - function
+      - input_data
+      - to
+      - value
+      title: Transaction
+      type: object
+    TransferEventModel:
+      properties:
+        event_type:
+          allOf:
+          - $ref: '#/components/schemas/TransferEventModelEventTypeEnum'
+          default: transfer
+          title: Event Type
+        chain:
+          allOf:
+          - $ref: '#/components/schemas/ChainIdentifier'
+          description: The chain on which the transfer occurred
+        transaction:
+          description: Transaction hash for the transfer
+          title: Transaction
+          type: string
+        from_address:
+          description: Address of the sender
+          title: From Address
+          type: string
+        to_address:
+          description: Address of the recipient
+          title: To Address
+          type: string
+        quantity:
+          description: Number of assets transferred
+          title: Quantity
+          type: integer
+      required:
+      - chain
+      - from_address
+      - quantity
+      - to_address
+      - transaction
+      title: TransferEventModel
+      type: object
+    TransferEventModelEventTypeEnum:
+      enum:
+      - transfer
+      type: string
+    core__blockchain__evm__abi__models__seaport__OrderType:
+      description: |-
+        The type of order, which determines how it can be executed.
+        0 = Full Open - No partial fills, anyone can execute
+        1 = Partial Open - Partial fills supported, anyone can execute
+        2 = Full Restricted - No partial fills, only offerer or zone can check if it can be executed
+        3 = Partial Restricted - Partial fills supported, only offerer or zone can check if it can be executed
+        4 = Contract - Contract order type, for contract offerers that can dynamically generate orders. Introduced in Seaport v1.4 and currently unsupported
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      properties: {}
+      title: OrderType
+      type: integer
+    core__types__OrderType:
+      description: |-
+        basic - Quantities are fixed. Used for fixed price listings and offers.
+        dutch - The quantity represents the starting price.
+        english - The quantity represents the minimum price.
+        criteria - The items that are accepted by this offer will be found in the criteria fields.
+      enum:
+      - basic
+      - dutch
+      - english
+      - criteria
+      example: {}
+      properties: {}
+      title: OrderType
+      type: string
+    Order:
+      anyOf:
+      - $ref: '#/components/schemas/Listing'
+      - $ref: '#/components/schemas/Offer'
+      title: Order
+    Events_inner:
+      anyOf:
+      - $ref: '#/components/schemas/CancelEventModel'
+      - $ref: '#/components/schemas/OrderEventModel'
+      - $ref: '#/components/schemas/SaleEventModel'
+      - $ref: '#/components/schemas/TransferEventModel'
+      - $ref: '#/components/schemas/RedemptionEventModel'
+    Asset:
+      anyOf:
+      - $ref: '#/components/schemas/NftModel'
+      - type: object
+      description: The asset being listed or bid on. Empty object for collection or
+        trait offers.
+      title: Asset
+    Criteria_1:
+      anyOf:
+      - $ref: '#/components/schemas/Criteria'
+      - type: object
+      description: "For collection and trait offers, this object will contain the\
+        \ criteria needed to fulfill the offer."
+      title: Criteria
+    Asset_1:
+      anyOf:
+      - $ref: '#/components/schemas/NftModel'
+      - type: object
+      description: The asset being redeemed.
+      title: Asset
+    Counter:
+      anyOf:
+      - type: integer
+      - type: string
+      title: Counter
+    Value:
+      anyOf:
+      - type: number
+      - type: integer
+      - format: date
+        type: string
+      - type: string
+      description: The value of the trait (e.g. 'Red')
+      title: Value
+  securitySchemes:
+    OpenSeaAuth:
+      in: header
+      name: x-api-key
+      type: apiKey
